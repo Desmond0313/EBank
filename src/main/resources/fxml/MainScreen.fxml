@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Line?>
@@ -33,12 +34,12 @@
             <Font name="System Bold" size="13.0" />
          </font>
       </Button>
-      <Button fx:id="infoButton" alignment="CENTER" layoutX="1.0" layoutY="387.0" mnemonicParsing="false" onAction="#infoButtonPressed" prefHeight="75.0" prefWidth="110.0" text="Information" textAlignment="CENTER" wrapText="true">
+      <Button fx:id="infoButton" alignment="CENTER" layoutX="1.0" layoutY="387.0" mnemonicParsing="false" onAction="#infoButtonPressed" prefHeight="75.0" prefWidth="110.0" text="Edit account info" textAlignment="CENTER" wrapText="true">
          <font>
             <Font name="System Bold" size="13.0" />
          </font>
       </Button>
-      <Label fx:id="bigLabel" alignment="TOP_LEFT" layoutX="140.0" layoutY="90.0" prefHeight="200.0" prefWidth="300.0" wrapText="true">
+      <Label fx:id="bigLabel" alignment="TOP_LEFT" layoutX="140.0" layoutY="90.0" prefHeight="194.0" prefWidth="476.0" wrapText="true">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
@@ -54,7 +55,9 @@
       <TextField fx:id="amountField" layoutX="331.0" layoutY="185.0" />
       <Label fx:id="targetLabel" layoutX="177.0" layoutY="141.0" prefWidth="150.0" text="Target account:" />
       <Label fx:id="amountLabel" layoutX="177.0" layoutY="190.0" prefWidth="150.0" text="Amount:" />
-      <TextField fx:id="pwField" layoutX="331.0" layoutY="235.0" />
       <Label fx:id="pwLabel" layoutX="177.0" layoutY="240.0" prefWidth="150.0" text="Password:" />
+      <PasswordField fx:id="oldpwField" layoutX="331.0" layoutY="136.0" />
+      <PasswordField fx:id="newpwField" layoutX="331.0" layoutY="185.0" />
+      <PasswordField fx:id="newpwConfField" layoutX="331.0" layoutY="235.0" />
    </children>
 </AnchorPane>

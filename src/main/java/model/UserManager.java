@@ -12,6 +12,7 @@ import java.util.Random;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -266,6 +267,24 @@ public class UserManager {
                 number;
         
         return info;
+    }
+    
+    public void processTransaction(User from, User to, String amount) throws ParserConfigurationException, SAXException, IOException, TransformerException {
+        
+        int a = Integer.parseInt(amount);
+        
+        from.setAccountBalance(from.getAccountBalance() - a);
+        to.setAccountBalance(to.getAccountBalance() + a);
+        
+        this.modifyUserData(from);
+        this.modifyUserData(to);
+    }
+    
+    public void changePassword(User u, String newpass) throws ParserConfigurationException, SAXException, IOException, TransformerException {
+        
+        u.setPassword(newpass);
+        
+        this.modifyUserData(u);
     }
    
 }

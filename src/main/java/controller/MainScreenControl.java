@@ -23,13 +23,16 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import model.*;
 import org.xml.sax.SAXException;
+import org.apache.commons.lang3.StringUtils;
 
 
 public class MainScreenControl implements Initializable {
     
-    UserManager um = new UserManager();
+    private UserManager um = new UserManager();
     
-    User current = null;
+    private User current = null;
+    
+    private int mode = 0;
     
     @FXML
     private Button balanceButton;
@@ -59,10 +62,34 @@ public class MainScreenControl implements Initializable {
     private Label userInfo;
     
     @FXML
+    private Label targetLabel;
+    
+    @FXML
+    private Label amountLabel;
+    
+    @FXML
+    private Label pwLabel;
+    
+    @FXML
+    private TextField targetField;
+    
+    @FXML
+    private TextField amountField;
+    
+    @FXML
+    private PasswordField oldpwField;
+    
+    @FXML
+    private PasswordField newpwField;
+    
+    @FXML
+    private PasswordField newpwConfField;
+    
+    @FXML
     private void balanceButtonPressed(ActionEvent event) throws ParserConfigurationException, SAXException, IOException, TransformerException {
         
-        goButton.setManaged(false);
-        goButton.setVisible(false);
+        mode = 1;
+        
         clear();
         
         bigLabel.setText(um.accountInfo(current));
@@ -72,21 +99,57 @@ public class MainScreenControl implements Initializable {
     @FXML
     private void transButtonPressed(ActionEvent event) {
         
+        mode = 2;
+        
+        clear();
+        
+        goButton.setVisible(true);
+        goButton.setText("Proceed");
+        targetLabel.setVisible(true);
+        amountLabel.setVisible(true);
+        pwLabel.setVisible(true);
+        
+        targetField.setVisible(true);
+        amountField.setVisible(true);
+        newpwConfField.setVisible(true);
+        
+        bigLabel.setText("Enter transaction details:");
         
     }
     
     @FXML
     private void loanButtonPressed(ActionEvent event) {
         
+        mode = 3;
+        
         clear();
-        goButton.setManaged(true);
         goButton.setVisible(true);
+        goButton.setText("Take loan");
+        
         
     
     }
     
     @FXML
     private void infoButtonPressed(ActionEvent event) {
+        
+        mode = 4;
+        
+        clear();
+        
+        goButton.setVisible(true);
+        goButton.setText("Save");
+        targetLabel.setVisible(true);
+        amountLabel.setVisible(true);
+        pwLabel.setVisible(true);
+        
+        oldpwField.setVisible(true);
+        newpwField.setVisible(true);
+        newpwConfField.setVisible(true);
+        
+        targetLabel.setText("Old password:");
+        amountLabel.setText("New password:");
+        pwLabel.setText("Confirm password:");
         
         
     }
@@ -110,15 +173,115 @@ public class MainScreenControl implements Initializable {
     }
     
     @FXML
-    private void goButtonPressed(ActionEvent event) {
+    private void goButtonPressed(ActionEvent event) throws ParserConfigurationException, SAXException, IOException, TransformerException {
         
+        if(mode == 2) {
+            
+            if(!(StringUtils.isNumeric(targetField.getText()) && StringUtils.isNumeric(amountField.getText()))) {
+                
+                bigLabel.setText("Please provide a valid target and amount!");
+                return;
+            }
+            
+            if(Integer.parseInt(amountField.getText()) > current.getAccountBalance()) {
+                
+                bigLabel.setText("Insufficient account balance!");
+                return;
+            }
+            
+            if(Integer.parseInt(targetField.getText()) == current.getAccountNumber()) {
+                
+                bigLabel.setText("Error! The provided target is your own account!");
+                return;
+            }
+            
+            if(newpwConfField.getText().equals(current.getPassword())) {
+                
+                User to = um.findUserByAccountNumber(Integer.parseInt(targetField.getText()));
+                if(to == null) {
+                    
+                    bigLabel.setText("The specified target account does not exist!");
+                    return;
+                }
+                
+                um.processTransaction(current, to, amountField.getText());
+                bigLabel.setText("Succesful transaction!");
+                
+            } else {
+                
+                bigLabel.setText("Wrong password, please try again!");
+                return;
+            }
+            
+            targetField.setText("");
+            amountField.setText("");
+            newpwConfField.setText("");
+            
+            return;
+        }
         
+        if(mode == 3) {}
+        
+        if(mode == 4) {
+            
+            if(oldpwField.getText().equals("")) {
+                
+                bigLabel.setText("Please provide your old password!");
+                return;
+            }
+            
+            if(newpwField.getText().equals("")) {
+                
+                bigLabel.setText("Please provide a new password!");
+                return;
+            }
+            
+            if(newpwConfField.getText().equals("")) {
+                
+                bigLabel.setText("Please confirm your new password!");
+                return;
+            }
+            
+            if(!oldpwField.getText().equals(current.getPassword())) {
+                
+                bigLabel.setText("Wrong old password, try again!");
+                return;
+            }
+            
+            if(!newpwField.getText().equals(newpwConfField.getText())) {
+                
+                bigLabel.setText("The password and the confirmation don't match!");
+                return;
+            }
+            
+            um.changePassword(current, newpwField.getText());
+            bigLabel.setText("Password change successful!");
+            
+            oldpwField.setText("");
+            newpwField.setText("");
+            newpwConfField.setText("");
+        }
     }
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
-        goButton.setManaged(false);
-        goButton.setVisible(false);
+        targetLabel.managedProperty().bind(targetLabel.visibleProperty());
+        amountLabel.managedProperty().bind(amountLabel.visibleProperty());
+        pwLabel.managedProperty().bind(pwLabel.visibleProperty());
+        
+        targetField.managedProperty().bind(targetField.visibleProperty());
+        amountField.managedProperty().bind(amountField.visibleProperty());
+        
+        oldpwField.managedProperty().bind(oldpwField.visibleProperty());
+        newpwField.managedProperty().bind(newpwField.visibleProperty());
+        newpwConfField.managedProperty().bind(newpwConfField.visibleProperty());
+        
+        goButton.managedProperty().bind(goButton.visibleProperty());
+        
+        clear();
+        
+        bigLabel.setText("Use the buttons to the left to perform actions.");
     }
 
     public void setCurrentUser(User u) {
@@ -131,6 +294,20 @@ public class MainScreenControl implements Initializable {
         
         bigLabel.setText("");
         smallLabel.setText("");
+        
+        targetLabel.setVisible(false);
+        amountLabel.setVisible(false);
+        pwLabel.setVisible(false);
+        
+        targetField.setVisible(false);
+        amountField.setVisible(false);
+        
+        oldpwField.setVisible(false);
+        newpwField.setVisible(false);
+        newpwConfField.setVisible(false);
+        
+        
+        goButton.setVisible(false);
     }
     
 }

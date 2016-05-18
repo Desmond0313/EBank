@@ -17,6 +17,7 @@ import javafx.stage.Stage;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import model.*;
+import org.apache.commons.lang3.StringUtils;
 import org.xml.sax.SAXException;
 
 public class LoginScreenControl implements Initializable {
@@ -43,7 +44,15 @@ public class LoginScreenControl implements Initializable {
     @FXML
     private void loginButtonPressed(ActionEvent event) throws ParserConfigurationException, SAXException, IOException {
         
-        current = um.findUserByAccountNumber(Integer.parseInt(accountField.getText()));
+        if(StringUtils.isNumeric(accountField.getText())) {
+            
+            current = um.findUserByAccountNumber(Integer.parseInt(accountField.getText()));
+        } else {
+            
+            label.setText("Please enter a valid account number!");
+            return;
+        }
+        
         
         if(current == null) {
             

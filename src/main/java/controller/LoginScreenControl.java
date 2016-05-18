@@ -67,6 +67,7 @@ public class LoginScreenControl implements Initializable {
 
                 stage.setScene(scene);
                 stage.show();
+                
             } else {
                 
                 label.setText("Wrong password! Please try again.");

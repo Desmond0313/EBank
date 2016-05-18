@@ -7,6 +7,8 @@ package model;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Random;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -201,6 +203,57 @@ public class UserManager {
         needed.setPassword(pw.getTextContent());
         
         return needed;
+    }
+    
+    public ArrayList<String> getAccountNumbers() throws SAXException, IOException, ParserConfigurationException {
+        
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = dbf.newDocumentBuilder();
+        
+        Document doc = db.parse(filePath);
+        
+        Node root = doc.getFirstChild();
+        
+        ArrayList<String> numbers = new ArrayList<>();
+        
+        NodeList users = doc.getElementsByTagName("user");
+        
+        for(int i = 0; i < users.getLength(); i++) {
+            
+            NodeList un = users.item(i).getChildNodes();
+            
+            for(int j = 0; j < un.getLength(); j++) {
+                
+                Node n = un.item(j);
+                
+                if("accountNumber".equals(n.getNodeName())) {
+                    
+                    numbers.add(n.getTextContent());
+                }
+            }
+        }
+        
+        return numbers;
+    }
+    
+    public String generateAccountNumber() throws SAXException, IOException, ParserConfigurationException {
+        
+        String generated;
+        
+        ArrayList<String> taken = this.getAccountNumbers();
+        
+        while(true) {
+            
+            Random ran = new Random();
+            
+            generated = Integer.toString(ran.nextInt(900000) + 100000);
+            
+            if(taken.isEmpty() || !taken.contains(generated)) break;
+            
+        }
+        
+        
+        return generated;
     }
    
 }

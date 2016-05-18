@@ -109,7 +109,7 @@ public class RegisterScreenControl implements Initializable {
     @FXML
     private void cancelButtonPressed(ActionEvent event) throws IOException {
         
-         Stage stage;
+                Stage stage;
                 Parent root;
 
                 stage = (Stage) cancelButton.getScene().getWindow();

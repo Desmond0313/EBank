@@ -255,5 +255,17 @@ public class UserManager {
         
         return generated;
     }
+    
+    public String accountInfo(User u) {
+        
+        String info = "";
+        
+        String number = Integer.toString(u.getAccountNumber());
+        
+        info = "Account info:\n\nName: " + u.getUserName() + "\nAccount number: " +
+                number;
+        
+        return info;
+    }
    
 }

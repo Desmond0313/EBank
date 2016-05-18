@@ -32,31 +32,105 @@ public class MainScreenControl implements Initializable {
     User current = null;
     
     @FXML
-    private TextField nameField;
+    private Button balanceButton;
     
     @FXML
-    private PasswordField pwField;
+    private Button transButton;
     
     @FXML
-    private Button setButton;
+    private Button loanButton;
     
     @FXML
-    private void setButtonPressed(ActionEvent event) throws ParserConfigurationException, SAXException, IOException, TransformerException {
+    private Button infoButton;
+    
+    @FXML
+    private Button logoutButton;
+    
+    @FXML
+    private Button goButton;
+    
+    @FXML
+    private Label bigLabel;
+    
+    @FXML
+    private Label smallLabel;
+    
+    @FXML
+    private Label userInfo;
+    
+    @FXML
+    private void balanceButtonPressed(ActionEvent event) throws ParserConfigurationException, SAXException, IOException, TransformerException {
         
-        current.setUserName(nameField.getText());
-        current.setPassword(pwField.getText());
+        goButton.setManaged(false);
+        goButton.setVisible(false);
+        clear();
         
-        um.modifyUserData(current);
+        bigLabel.setText(um.accountInfo(current));
+        smallLabel.setText("Your balance:\t\t" + String.format("%,d", current.getAccountBalance()));
     }
     
+    @FXML
+    private void transButtonPressed(ActionEvent event) {
+        
+        
+    }
+    
+    @FXML
+    private void loanButtonPressed(ActionEvent event) {
+        
+        clear();
+        goButton.setManaged(true);
+        goButton.setVisible(true);
+        
+    
+    }
+    
+    @FXML
+    private void infoButtonPressed(ActionEvent event) {
+        
+        
+    }
+    
+    @FXML
+    private void logoutButtonPressed(ActionEvent event) throws IOException {
+        
+                Stage stage;
+                Parent root;
+
+                stage = (Stage) logoutButton.getScene().getWindow();
+
+                FXMLLoader fl = new FXMLLoader(getClass().getResource("/fxml/LoginScreen.fxml"));
+
+                root = fl.load();
+
+                Scene scene = new Scene(root);
+
+                stage.setScene(scene);
+                stage.show();
+    }
+    
+    @FXML
+    private void goButtonPressed(ActionEvent event) {
+        
+        
+    }
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        
+        goButton.setManaged(false);
+        goButton.setVisible(false);
     }
 
     public void setCurrentUser(User u) {
         
         current = u;
+        userInfo.setText("Logged in as " + current.getUserName());
+    }
+    
+    public void clear() {
+        
+        bigLabel.setText("");
+        smallLabel.setText("");
     }
     
 }

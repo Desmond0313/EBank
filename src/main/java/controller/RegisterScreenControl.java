@@ -95,7 +95,7 @@ public class RegisterScreenControl implements Initializable {
         u.setUserName(nameField.getText());
         u.setPassword(pwField.getText());
         u.setAccountNumber(Integer.parseInt(numberField.getText()));
-        u.setAccountBalance(30000);
+        u.setAccountBalance(um.getDefaultBalance());
         
         um.createUserData(u);
         

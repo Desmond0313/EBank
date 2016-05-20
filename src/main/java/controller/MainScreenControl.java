@@ -93,7 +93,7 @@ public class MainScreenControl implements Initializable {
         clear();
         
         bigLabel.setText(um.accountInfo(current));
-        smallLabel.setText("Your balance:\t\t" + String.format("%,d", current.getAccountBalance()));
+        smallLabel.setText(um.balanceInfo(current));
     }
     
     @FXML
@@ -113,12 +113,16 @@ public class MainScreenControl implements Initializable {
         amountField.setVisible(true);
         newpwConfField.setVisible(true);
         
+        targetLabel.setText("Target account:");
+        amountLabel.setText("Amount:");
+        pwLabel.setText("Your password:");
+        
         bigLabel.setText("Enter transaction details:");
         
     }
     
     @FXML
-    private void loanButtonPressed(ActionEvent event) {
+    private void loanButtonPressed(ActionEvent event) throws ParserConfigurationException, SAXException, IOException {
         
         mode = 3;
         
@@ -126,7 +130,10 @@ public class MainScreenControl implements Initializable {
         goButton.setVisible(true);
         goButton.setText("Take loan");
         
+        if(current.getLoan()) goButton.setDisable(true);
         
+        bigLabel.setText(um.loanInfo(current));
+        smallLabel.setText(um.paymentInfo(current));
     
     }
     
@@ -220,7 +227,14 @@ public class MainScreenControl implements Initializable {
             return;
         }
         
-        if(mode == 3) {}
+        if(mode == 3) {
+        
+            current.setAccountBalance(current.getAccountBalance() + um.openLoan(current));
+            current.setLoan(true);
+            bigLabel.setText(um.loanInfo(current));
+            smallLabel.setText(um.paymentInfo(current));
+            goButton.setDisable(true);
+        }
         
         if(mode == 4) {
             
@@ -282,15 +296,23 @@ public class MainScreenControl implements Initializable {
         clear();
         
         bigLabel.setText("Use the buttons to the left to perform actions.");
+        
+        
     }
 
-    public void setCurrentUser(User u) {
+    public void setCurrentUser(User u) throws SAXException, ParserConfigurationException, IOException, TransformerException {
         
         current = u;
         userInfo.setText("Logged in as " + current.getUserName());
+        
+        if(current.getLoan()) {
+            
+            current.setAccountBalance(um.processLoan(current, current.getAccountBalance()));
+            current.setLoan(um.isLoanCompleted(current));
+        }
     }
     
-    public void clear() {
+    private void clear() {
         
         bigLabel.setText("");
         smallLabel.setText("");
@@ -308,6 +330,7 @@ public class MainScreenControl implements Initializable {
         
         
         goButton.setVisible(false);
+        goButton.setDisable(false);
     }
     
 }

@@ -15,15 +15,17 @@ public class User {
     private String password;
     private int accountNumber;
     private int accountBalance;
+    private boolean hasLoan;
     
     public User() {}
 
-    public User(String userName, String password, int accountNumber, int accountBalance) {
+    public User(String userName, String password, int accountNumber, int accountBalance, boolean hasLoan) {
         
         this.userName = userName;
         this.password = password;
         this.accountNumber = accountNumber;
         this.accountBalance = accountBalance;
+        this.hasLoan = hasLoan;
     }
 
     public String getUserName() {
@@ -40,6 +42,10 @@ public class User {
 
     public int getAccountBalance() {
         return accountBalance;
+    }
+    
+    public boolean getLoan() {
+        return hasLoan;
     }
 
     public void setUserName(String userName) {
@@ -58,9 +64,13 @@ public class User {
         this.accountBalance = accountBalance;
     }
     
+    public void setLoan(boolean hasLoan) {
+        this.hasLoan = hasLoan;
+    }
+    
     @Override
     public String toString() {
         
-        return "Name: " + this.userName + "\nAccount number: " + this.accountNumber + "\nBalance: " + this.accountBalance;
+        return "Name: " + this.userName + "\nAccount number: " + this.accountNumber + "\nBalance: " + this.accountBalance + "\n Active loan: " + this.hasLoan;
     }
 }

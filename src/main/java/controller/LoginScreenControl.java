@@ -42,7 +42,7 @@ public class LoginScreenControl implements Initializable {
     private PasswordField pwField;
     
     @FXML
-    private void loginButtonPressed(ActionEvent event) throws ParserConfigurationException, SAXException, IOException {
+    private void loginButtonPressed(ActionEvent event) throws ParserConfigurationException, SAXException, IOException, TransformerException {
         
         if(StringUtils.isNumeric(accountField.getText())) {
             

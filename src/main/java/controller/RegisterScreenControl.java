@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+// CHECKSTYLE:OFF
 package controller;
 
 import model.UserManager;
@@ -24,6 +20,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import model.*;
 import org.xml.sax.SAXException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -31,8 +29,9 @@ import org.xml.sax.SAXException;
  */
 public class RegisterScreenControl implements Initializable {
     
-    UserManager um = new UserManager();
-    User u = new User();
+    private static Logger logger = LoggerFactory.getLogger(RegisterScreenControl.class);
+    private UserManager um = new UserManager();
+    private User u = new User();
     
     boolean gen = false;
     
@@ -105,6 +104,8 @@ public class RegisterScreenControl implements Initializable {
         regButton.setDisable(true);
         
         cancelButton.setText("Login");
+        
+        logger.info("A new user was registered with data:\n" + u.toString());
     }
     
     @FXML
@@ -138,6 +139,7 @@ public class RegisterScreenControl implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
     
+        logger.info("User changed to the register screen.");
         numberField.setDisable(true);
         numberField.setText("Please generate");
     }

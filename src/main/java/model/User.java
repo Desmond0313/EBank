@@ -126,6 +126,7 @@ public class User {
         this.hasLoan = hasLoan;
     }
     
+    // CHECKSTYLE:OFF
     @Override
     public String toString() {
         

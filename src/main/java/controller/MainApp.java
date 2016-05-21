@@ -1,3 +1,4 @@
+// CHECKSTYLE:OFF
 package controller;
 
 import model.UserManager;
@@ -8,16 +9,21 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import model.*;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MainApp extends Application {
-
+    
+    private static Logger logger = LoggerFactory.getLogger(MainApp.class);
+    
     @Override
     public void start(Stage stage) throws Exception {
         
         UserManager um = new UserManager();
         
         if(!um.checkForXML()) um.createXML();
+        
+        if(!um.checkForXML()) logger.error("ERROR - The users.xml file could not be created!");
         
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/LoginScreen.fxml"));
         

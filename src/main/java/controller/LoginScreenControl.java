@@ -1,3 +1,4 @@
+// CHECKSTYLE:OFF
 package controller;
 
 import model.UserManager;
@@ -20,12 +21,16 @@ import javax.xml.transform.TransformerException;
 import model.*;
 import org.apache.commons.lang3.StringUtils;
 import org.xml.sax.SAXException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class LoginScreenControl implements Initializable {
     
-    UserManager um = new UserManager();
+    private static Logger logger = LoggerFactory.getLogger(LoginScreenControl.class);
     
-    User current = null;
+    private UserManager um = new UserManager();
+    
+    private User current = null;
     
     @FXML
     private Label label;
@@ -62,6 +67,8 @@ public class LoginScreenControl implements Initializable {
             
             if(current.getPassword().equals(pwField.getText())) {
                 
+                logger.info("A user has logged in with info:\n" + current.toString());
+                
                 Stage stage;
                 Parent root;
 
@@ -88,7 +95,7 @@ public class LoginScreenControl implements Initializable {
     
     @FXML
     private void regButtonPressed(ActionEvent event) throws IOException {
-        
+           
         Stage stage;
         Parent root;
         
@@ -106,6 +113,6 @@ public class LoginScreenControl implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        logger.info("User has changed to the login screen.");
     }    
 }

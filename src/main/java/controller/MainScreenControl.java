@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+// CHECKSTYLE:OFF
 package controller;
 
 import model.UserManager;
@@ -25,9 +21,12 @@ import javax.xml.transform.TransformerException;
 import model.*;
 import org.xml.sax.SAXException;
 import org.apache.commons.lang3.StringUtils;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MainScreenControl implements Initializable {
+
+    private static Logger logger = LoggerFactory.getLogger(MainScreenControl.class);
     
     private UserManager um = new UserManager();
     
@@ -89,6 +88,8 @@ public class MainScreenControl implements Initializable {
     @FXML
     private void balanceButtonPressed(ActionEvent event) throws ParserConfigurationException, SAXException, IOException, TransformerException {
         
+        logger.info("Showing the user's account info and balance");
+        
         mode = 1;
         
         clear();
@@ -99,6 +100,8 @@ public class MainScreenControl implements Initializable {
     
     @FXML
     private void transButtonPressed(ActionEvent event) {
+        
+        logger.info("Changed to the transaction page");
         
         mode = 2;
         
@@ -125,13 +128,22 @@ public class MainScreenControl implements Initializable {
     @FXML
     private void loanButtonPressed(ActionEvent event) throws ParserConfigurationException, SAXException, IOException {
         
+        logger.info("Changed to the loan page.");
+        
         mode = 3;
         
         clear();
         goButton.setVisible(true);
         goButton.setText("Take loan");
         
-        if(current.getLoan()) goButton.setDisable(true);
+        if(current.getLoan()) {
+            
+            logger.info("User has an active loan so we disable further loans.");
+            goButton.setDisable(true);
+        } else {
+            
+            logger.info("User has no active loan so we enable taking a loan.");
+        }
         
         bigLabel.setText(um.loanInfo(current));
         smallLabel.setText(um.paymentInfo(current));
@@ -140,6 +152,8 @@ public class MainScreenControl implements Initializable {
     
     @FXML
     private void infoButtonPressed(ActionEvent event) {
+        
+        logger.info("Changed to the password change page.");
         
         mode = 4;
         
@@ -164,6 +178,8 @@ public class MainScreenControl implements Initializable {
     
     @FXML
     private void logoutButtonPressed(ActionEvent event) throws IOException {
+                
+                logger.info("Logout button pressed, logging user out...");
         
                 Stage stage;
                 Parent root;
@@ -214,12 +230,16 @@ public class MainScreenControl implements Initializable {
                 
                 um.processTransaction(current, to, amountField.getText());
                 bigLabel.setText("Succesful transaction!");
+                logger.info("Succesful transaction with amount: " + amountField.getText() + " from: " 
+                        + current.getAccountNumber() + " to: " + to.getAccountNumber());
                 
             } else {
                 
                 bigLabel.setText("Wrong password, please try again!");
                 return;
             }
+            
+            logger.info("Reseting textfields to prevent multiple transactions...");
             
             targetField.setText("");
             amountField.setText("");
@@ -229,11 +249,14 @@ public class MainScreenControl implements Initializable {
         }
         
         if(mode == 3) {
-        
+            
+            logger.info("Opening a new loan for user " + current.getAccountNumber() + "...");
+            
             current.setAccountBalance(current.getAccountBalance() + um.openLoan(current));
             current.setLoan(true);
             bigLabel.setText(um.loanInfo(current));
             smallLabel.setText(um.paymentInfo(current));
+            logger.info("Loan opened for user " + current.getAccountNumber() + " with default amount.");
             goButton.setDisable(true);
         }
         
@@ -271,6 +294,7 @@ public class MainScreenControl implements Initializable {
             
             um.changePassword(current, newpwField.getText());
             bigLabel.setText("Password change successful!");
+            logger.info("Password change successful for user " + current.getAccountNumber());
             
             oldpwField.setText("");
             newpwField.setText("");
@@ -280,6 +304,8 @@ public class MainScreenControl implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+        logger.info("User changed to the main screen");
         
         targetLabel.managedProperty().bind(targetLabel.visibleProperty());
         amountLabel.managedProperty().bind(amountLabel.visibleProperty());
@@ -303,6 +329,8 @@ public class MainScreenControl implements Initializable {
 
     public void setCurrentUser(User u) throws SAXException, ParserConfigurationException, IOException, TransformerException {
         
+        logger.info("Getting current user...");
+        
         current = u;
         userInfo.setText("Logged in as " + current.getUserName());
         
@@ -311,9 +339,13 @@ public class MainScreenControl implements Initializable {
             current.setAccountBalance(um.processLoan(current, current.getAccountBalance()));
             current.setLoan(um.isLoanCompleted(current));
         }
+        
+        logger.info("Current user is: " + current.toString());
     }
     
     private void clear() {
+        
+        logger.info("Clearing and disabling textfields and goButton...");
         
         bigLabel.setText("");
         smallLabel.setText("");

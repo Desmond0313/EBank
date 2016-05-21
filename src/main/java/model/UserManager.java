@@ -233,9 +233,7 @@ public class UserManager {
      * @throws TransformerException if there is an error while transforming the DOM document
      */
     public void modifyUserData(User u) throws ParserConfigurationException, SAXException, IOException, TransformerException {
-        
-        System.out.println(u);
-        
+                
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
         

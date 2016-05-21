@@ -288,21 +288,16 @@ public class UserManager {
     
     public String accountInfo(User u) {
         
-        String info = "";
-        
         String number = Integer.toString(u.getAccountNumber());
         
-        info = "Account info:\n\nName: " + u.getUserName() + "\nAccount number: " +
-                number;
+        String info = "Account info:\n\nName: " + u.getUserName() + "\nAccount number: " +number;
         
         return info;
     }
     
     public String balanceInfo(User u) {
         
-        String info = "";
-        
-        info = "Your current balance is:\t\t" + String.format("%,d", u.getAccountBalance());
+        String info = "Your current balance is:\t\t" + String.format("%,d", u.getAccountBalance());
         
         return info;
     }
@@ -345,7 +340,7 @@ public class UserManager {
         
         int left = Integer.parseInt(amountLeft.getTextContent());
         
-        info = "Amount left to pay back: " + String.format("%,d", left);
+        info = "Amount left to pay back:\t\t" + String.format("%,d", left);
         
         return info;
     }
@@ -465,7 +460,7 @@ public class UserManager {
         
         if(user.getLastChild().getLastChild().getTextContent().equals("0")) {
             
-            doc.removeChild(user.getLastChild());
+            user.removeChild(user.getLastChild());
             
             TransformerFactory trf = TransformerFactory.newInstance();
             Transformer tr = trf.newTransformer();

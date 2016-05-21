@@ -417,9 +417,9 @@ public class UserManager {
     
     /**
      * Assembles the {@code String} that tells
-     * if {@User u} is allowed to take a loan.
+     * if {@code User u} is allowed to take a loan.
      * @param u the user in question
-     * @return if {@User u} can take a loan or not
+     * @return if {@code User u} can take a loan or not
      */
     public String loanInfo(User u) {
         

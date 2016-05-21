@@ -5,7 +5,7 @@
  */
 package tests;
 
-import controller.UserManager;
+import model.UserManager;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;

@@ -1,15 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package model;
 
 import java.util.Objects;
 
 /**
- *
- * @author takacsd
+ * This class provides a {@code User} object to store
+ * information at runtime about the current e-Bank user.
+ * 
+ * @author Takács Ferenc Dániel
  */
 public class User {
     
@@ -19,8 +16,22 @@ public class User {
     private int accountBalance;
     private boolean hasLoan;
     
+    /**
+     * Empty constructor for the {@code User} class.
+     * 
+     */
     public User() {}
 
+    /**
+     * Parameterized constructor for the {@code User} class.
+     * Every user is identified by their unique account number.
+     * 
+     * @param userName the user's forename and surname
+     * @param password the user's login password
+     * @param accountNumber the user's unique account number
+     * @param accountBalance the user's current account balance
+     * @param hasLoan specifies if the user has an active loan or not
+     */
     public User(String userName, String password, int accountNumber, int accountBalance, boolean hasLoan) {
         
         this.userName = userName;
@@ -30,42 +41,87 @@ public class User {
         this.hasLoan = hasLoan;
     }
 
+    /**
+     *  Returns the user's forename and surname.
+     * @return the user's forename and surname
+     */
     public String getUserName() {
         return userName;
     }
 
+    /**
+     * Returns the user's password.
+     * @return the user's password
+     */
     public String getPassword() {
         return password;
     }
 
+    /**
+     * Returns the user's unique account number.
+     * @return the user's account number
+     */
     public int getAccountNumber() {
         return accountNumber;
     }
 
+    /**
+     * Returns the user's current account balance.
+     * @return the user's account balance
+     */
     public int getAccountBalance() {
         return accountBalance;
     }
     
+    /**
+     * Returns a {@code boolean} indicating an active loan.
+     * If {@code hasLoan} is {@code false}, the user is loan-free.
+     * If {@code hasLoan} is {@code true}, the user has an active loan.
+     * @return if the user has an active loan
+     */
     public boolean getLoan() {
         return hasLoan;
     }
 
+    /**
+     * Sets the user's name.
+     * @param userName the new name
+     */
     public void setUserName(String userName) {
         this.userName = userName;
     }
 
+    /**
+     * Sets a new password.
+     * @param password new password
+     */
     public void setPassword(String password) {
         this.password = password;
     }
 
+    /**
+     * Sets a new account number.
+     * This method is not used because every user is
+     * identified by their account number. It is randomly
+     * generated upon registration.
+     * @param accountNumber the new account number
+     */
     public void setAccountNumber(int accountNumber) {
         this.accountNumber = accountNumber;
     }
 
+    /**
+     * Sets a new account balance.
+     * @param accountBalance new account balance
+     */
     public void setAccountBalance(int accountBalance) {
         this.accountBalance = accountBalance;
     }
     
+    /**
+     * Sets if the user has an active loan or not
+     * @param hasLoan new state of having a loan
+     */
     public void setLoan(boolean hasLoan) {
         this.hasLoan = hasLoan;
     }

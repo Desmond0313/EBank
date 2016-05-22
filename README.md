@@ -1,7 +1,6 @@
 # EBank
 
 Author: Ferenc Dániel Takács
-Neptun ID: YJU4SX
 
 ##Summary
 

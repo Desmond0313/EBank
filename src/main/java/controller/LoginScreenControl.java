@@ -63,7 +63,7 @@ public class LoginScreenControl implements Initializable {
         
         if(current == null) {
             
-            label.setText("Account not found! Please check the number you entered!");
+            label.setText("Account not found! Please check the number!");
         } else {
             
             if(current.getPassword().equals(pwField.getText())) {

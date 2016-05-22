@@ -119,7 +119,7 @@ public class User {
     }
     
     /**
-     * Sets if the user has an active loan or not
+     * Sets if the user has an active loan or not.
      * @param hasLoan new state of having a loan
      */
     public void setLoan(boolean hasLoan) {

@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package model;
 
 import java.io.File;
@@ -26,6 +22,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import java.time.temporal.ChronoUnit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class provides connection between the {@code User}
@@ -37,6 +35,7 @@ import java.time.temporal.ChronoUnit;
  */
 public class UserManager {
     
+    private static Logger logger = LoggerFactory.getLogger(UserManager.class);
     private String filePath = System.getProperty("user.home") + "/.users/users.xml";
     private int defaultBalance = 30000;
     
@@ -100,6 +99,8 @@ public class UserManager {
      */
     public void createXML() throws ParserConfigurationException, TransformerConfigurationException, TransformerException {
         
+        logger.info("Creating users.xml...");
+        
         File output = new File(filePath);
         
         output.getParentFile().mkdirs();
@@ -123,17 +124,9 @@ public class UserManager {
     
     /**
      * Creates a new entry in the {@code users.xml} with the
-     * data of {@code User u}. Sample:
-     * {@code 
-     * 
-     * <users>
-     *      <user>
-     *          <name>Username</name>
-     *          <accountNumber>000000</accountNumber>
-     *          <balance>420</balance>
-     *          <password>sosecret</password>
-     *      </user>
-     * </users> }
+     * data of {@code User u}. The file will contain the
+     * following tags: {@code <users>, <user>, <name>,
+     * <accountNumber>, <balance>, <password>}.
      *
      * @param u the user whose data we're storing
      * @throws ParserConfigurationException if there is an error while configuring the parser
@@ -143,6 +136,8 @@ public class UserManager {
      * @throws TransformerException if there is an error while transforming the DOM document
      */
     public void createUserData(User u) throws ParserConfigurationException, SAXException, IOException, TransformerConfigurationException, TransformerException {
+        
+        logger.info("Creating users.xml data for user " + u.getAccountNumber() + "...");
         
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
@@ -184,6 +179,7 @@ public class UserManager {
         
         tr.transform(src, res);
         
+        logger.info("Data created!");
     }
     
     /**
@@ -194,6 +190,8 @@ public class UserManager {
      * @return the specific user's {@code Node}
      */
     public Node findUserNode(NodeList nl, String an) {
+        
+        logger.info("Findig user in users.xml with ID " + an);
         
         Node user = null;
         
@@ -233,7 +231,9 @@ public class UserManager {
      * @throws TransformerException if there is an error while transforming the DOM document
      */
     public void modifyUserData(User u) throws ParserConfigurationException, SAXException, IOException, TransformerException {
-                
+        
+        logger.info("Saving data of user " + u.getAccountNumber());
+        
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
         
@@ -276,6 +276,8 @@ public class UserManager {
      * @throws IOException if an I/O error occurs
      */
     public User findUserByAccountNumber(int anum) throws ParserConfigurationException, SAXException, IOException {
+        
+        logger.info("Searching for user in users.xml with ID " + anum);
         
         User needed = new User();
         
@@ -327,6 +329,8 @@ public class UserManager {
      */
     public ArrayList<String> getAccountNumbers() throws SAXException, IOException, ParserConfigurationException {
         
+        logger.info("Gathering user account numbers...");
+        
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
         
@@ -367,6 +371,8 @@ public class UserManager {
      */
     public String generateAccountNumber() throws SAXException, IOException, ParserConfigurationException {
         
+        logger.info("Generating a new account ID...");
+        
         String generated;
         
         ArrayList<String> taken = this.getAccountNumbers();
@@ -375,13 +381,14 @@ public class UserManager {
             
             Random ran = new Random();
             
+            logger.info("Generating new random number...");
             generated = Integer.toString(ran.nextInt(900000) + 100000);
             
             if(!taken.contains(generated)) break;
-            
+            logger.info("Number already taken!");
         }
         
-        
+        logger.info("New account ID created: " + generated);
         return generated;
     }
     
@@ -392,6 +399,8 @@ public class UserManager {
      * @return a {@code String} with the user's information
      */
     public String accountInfo(User u) {
+        
+        logger.info("Assembling account info for user " + u.getAccountNumber());
         
         String number = Integer.toString(u.getAccountNumber());
         
@@ -408,6 +417,8 @@ public class UserManager {
      */
     public String balanceInfo(User u) {
         
+        logger.info("Assembling balance info for user " + u.getAccountNumber());
+        
         String info = "Your current balance is:\t\t" + String.format("%,d", u.getAccountBalance());
         
         return info;
@@ -420,6 +431,8 @@ public class UserManager {
      * @return if {@code User u} can take a loan or not
      */
     public String loanInfo(User u) {
+        
+        logger.info("Assembling loan info for user " + u.getAccountNumber());
         
         String info = "";
         
@@ -445,6 +458,8 @@ public class UserManager {
      * @throws IOException if an I/O error occurs
      */
     public String paymentInfo(User u) throws ParserConfigurationException, SAXException, IOException {
+        
+        logger.info("Assembling payment info for user " + u.getAccountNumber());
         
         String info = "";
         
@@ -486,6 +501,8 @@ public class UserManager {
      */
     public void processTransaction(User from, User to, String amount) throws ParserConfigurationException, SAXException, IOException, TransformerException {
         
+        logger.info("Processing transaction...");
+        
         int a = Integer.parseInt(amount);
         
         from.setAccountBalance(from.getAccountBalance() - a);
@@ -498,23 +515,8 @@ public class UserManager {
     /**
      * Opens a new loan for {@code User u}. The default loan is
      * 50,000 which gets added to the user's balance. In the
-     * {@code users.xml}, 3 new tags will be created, so the
-     * user's data will look like this:
-     * {@code 
-     * 
-     * <users>
-     *      <user>
-     *          <name>Username</name>
-     *          <accountNumber>000000</name>
-     *          <balance>420</balance>
-     *          <password>sosecret</password>
-     *          <loan>
-     *              <lastChecked>2000-01-01</lastChecked>
-     *              <amountLeft>50000</amountLeft>
-     *          </loan>
-     *      </user>
-     * </users> }
-     * 
+     * {@code users.xml}, 3 new tags will be created: {@code <loan>,
+     * <lastChecked>, <amountLeft>},
      * where {@code lastChecked} is the date of the last time a payment was
      * done, and {@code amountLeft} is the overall amount left to pay.
      * @param u the user who takes a loan
@@ -582,6 +584,8 @@ public class UserManager {
      */
     public int processLoan(User u, int currentBalance) throws SAXException, ParserConfigurationException, IOException, TransformerException {
         
+        logger.info("Processing active loan of user " + u.getAccountNumber());
+        
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
         
@@ -606,7 +610,9 @@ public class UserManager {
         LocalDate today = LocalDate.now();
         
         if(ChronoUnit.DAYS.between(lc, today) != 0) {
-        
+            
+            logger.info("Loan last processed " + ChronoUnit.DAYS.between(lc, today) + " days ago.");
+            logger.info("Removing " + ChronoUnit.DAYS.between(lc, today) * 5000 + " from user balance.");
             currentBalance -= ChronoUnit.DAYS.between(lc, today) * 5000;
             balance.setTextContent(Integer.toString(Integer.parseInt(balance.getTextContent()) - 5000));
             lastChecked.setTextContent(LocalDate.now().toString());
@@ -620,9 +626,11 @@ public class UserManager {
         
             tr.transform(src, res);
             
+            logger.info("Loan processing done.");
             return currentBalance;
         }
         
+        logger.info("No need to process loan, returning the same balance...");
         return currentBalance;
     }
     
@@ -640,6 +648,8 @@ public class UserManager {
      * @throws TransformerException if there is an error while transforming the DOM document
      */
     public boolean isLoanCompleted(User u) throws ParserConfigurationException, SAXException, IOException, TransformerConfigurationException, TransformerException {
+        
+        logger.info("Checking if user " + u.getAccountNumber() + " has completed his/her loan...");
         
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
@@ -664,9 +674,10 @@ public class UserManager {
 
             tr.transform(src, res);
             
+            logger.info("The loan is completed!");
             return false;
         }
-        
+        logger.info("Loan is not completed!");
         return true;
     }
     

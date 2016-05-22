@@ -50,7 +50,8 @@ public class LoginScreenControl implements Initializable {
     @FXML
     private void loginButtonPressed(ActionEvent event) throws ParserConfigurationException, SAXException, IOException, TransformerException {
         
-        if(StringUtils.isNumeric(accountField.getText())) {
+        
+        if(StringUtils.isNumeric(accountField.getText()) && accountField.getText().length() == 6) {
             
             current = um.findUserByAccountNumber(Integer.parseInt(accountField.getText()));
         } else {

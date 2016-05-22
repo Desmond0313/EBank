@@ -5,7 +5,7 @@ Neptun ID: YJU4SX
 
 ##Summary
 
-This is repository of my homework project. This program implements a simple electornic banking interface. It can be used to perform the most basic operations of a real-life e-bank (eg. registration, login, transaction, loan, etc.).
+This is the repository of my homework project. This program implements a simple electronic banking interface. It can be used to perform the most basic operations of a real-life e-bank (eg. registration, login, transaction, loan, etc.).
 
 This project is made for the `Programming Technologies` and `Programming Environments` subjects at the University of Debrecen.
 
